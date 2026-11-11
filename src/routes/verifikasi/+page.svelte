@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { ShieldCheck, Download, CircleCheck, CircleX, Building2, Music, TrendingDown, LoaderCircle, Info } from '@lucide/svelte';
 	import LineChart from '#lib/ui/LineChart.svelte';
 	import { runAyun } from '#lib/verify/ayunCases';
 	import { runLaras } from '#lib/verify/larasCases';
 	import { type VerifyResult, fmtGalat, toCsv } from '#lib/verify/types';
 	import { WARNA } from '#lib/render/types';
 
-	let hasil = $state.raw<{ nama: string; r: VerifyResult }[] | null>(null);
+	let hasil = $state.raw<{ nama: string; r: VerifyResult; ikon: typeof Music; aksen: string }[] | null>(null);
 	let ms = $state(0);
 	onMount(() => {
 		// dihitung setelah halaman tampil supaya pesan "menghitung" sempat terlihat
 		const id = setTimeout(() => {
 			const t0 = performance.now();
 			hasil = [
-				{ nama: 'Ayun (gedung, Newmark-β)', r: runAyun() },
-				{ nama: 'Laras (bilah, elemen hingga)', r: runLaras() }
+				{ nama: 'Ayun (gedung, Newmark-β)', r: runAyun(), ikon: Building2, aksen: '#2F5D7C' },
+				{ nama: 'Laras (bilah, elemen hingga)', r: runLaras(), ikon: Music, aksen: '#8A5F1A' }
 			];
 			ms = performance.now() - t0;
 		}, 50);
@@ -39,26 +40,26 @@
 </svelte:head>
 
 <div class="mx-auto max-w-7xl px-4 py-5">
-	<p class="label-kecil">Panel Verifikasi</p>
+	<p class="label-kecil flex items-center gap-1.5"><ShieldCheck size={14} />Panel Verifikasi</p>
 	<h1 class="text-2xl font-extrabold tracking-tight md:text-3xl">Apakah angkanya benar?</h1>
 	<p class="mt-1 max-w-3xl text-sm text-redup">
 		Semua kasus di bawah dijalankan di browser ini saat halaman dibuka, dengan kode yang sama persis dengan yang dipakai modul Laras dan Ayun. Tiap hasil dibandingkan dengan solusi analitik dari buku teks. Kasus yang sama dijalankan oleh perintah <code class="font-mono">npm run verify</code> untuk tabel di laporan.
 	</p>
 
 	<div class="mt-4 flex flex-wrap items-center gap-3">
-		<button class="tombol tombol-utama" onclick={unduh} disabled={!hasil}>Unduh CSV</button>
+		<button class="tombol tombol-utama" onclick={unduh} disabled={!hasil}><Download size={16} />Unduh CSV</button>
 		<p class="text-sm" aria-live="polite">
 			{#if hasil}
-				<strong style:color={semua.every((r) => r.lolos) ? WARNA.aman : WARNA.bahaya}>{semua.filter((r) => r.lolos).length} dari {semua.length} kasus lolos</strong>
+				<strong class="inline-flex items-center gap-1" style:color={semua.every((r) => r.lolos) ? WARNA.aman : WARNA.bahaya}><CircleCheck size={16} />{semua.filter((r) => r.lolos).length} dari {semua.length} kasus lolos</strong>
 				<span class="text-redup">(dihitung dalam {ms.toFixed(0)} ms)</span>
 			{:else}
-				Menghitung semua kasus...
+				<span class="inline-flex items-center gap-1.5"><LoaderCircle size={16} class="animate-spin" />Menghitung semua kasus...</span>
 			{/if}
 		</p>
 	</div>
 
 	{#each hasil ?? [] as h (h.nama)}
-		<h2 class="mb-2 mt-6 text-lg font-extrabold">{h.nama}</h2>
+		<h2 class="mb-2 mt-6 flex items-center gap-2 text-lg font-extrabold" style="--aksen:{h.aksen}"><span class="ikon-bulat"><h.ikon size={17} /></span>{h.nama}</h2>
 		<div class="kartu overflow-x-auto !p-0">
 			<table class="w-full min-w-[60rem] text-left text-sm">
 				<thead>
@@ -68,14 +69,14 @@
 				</thead>
 				<tbody>
 					{#each h.r.rows as r, i (i)}
-						<tr class="border-b border-garis align-top last:border-0">
+						<tr class="border-b border-garis align-top transition-colors last:border-0 hover:bg-kertas">
 							<td class="whitespace-nowrap p-2.5 font-mono font-semibold">{r.id}</td>
 							<td class="p-2.5">{r.skenario}</td>
 							<td class="p-2.5 font-mono text-xs">{r.hasil}</td>
 							<td class="p-2.5 font-mono text-xs">{r.acuan}</td>
 							<td class="whitespace-nowrap p-2.5 font-mono text-xs">{fmtGalat(r.galat)} {r.satuanGalat}</td>
 							<td class="whitespace-nowrap p-2.5 font-mono text-xs">{r.target}</td>
-							<td class="p-2.5"><span class="whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-bold text-white" style:background={r.lolos ? WARNA.aman : WARNA.bahaya}>{r.lolos ? 'Lolos' : 'Tidak lolos'}</span></td>
+							<td class="p-2.5"><span class="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-bold text-white" style:background={r.lolos ? WARNA.aman : WARNA.bahaya}>{#if r.lolos}<CircleCheck size={12} />Lolos{:else}<CircleX size={12} />Tidak lolos{/if}</span></td>
 						</tr>
 					{/each}
 				</tbody>
@@ -84,7 +85,7 @@
 	{/each}
 
 	{#if hasil}
-		<h2 class="mb-2 mt-6 text-lg font-extrabold">Uji konvergensi</h2>
+		<h2 class="mb-2 mt-6 flex items-center gap-2 text-lg font-extrabold"><span class="ikon-bulat"><TrendingDown size={17} /></span>Uji konvergensi</h2>
 		<p class="mb-3 max-w-3xl text-sm text-redup">
 			Pada sumbu log-log, galat metode berorde p membentuk garis lurus dengan kemiringan p. Newmark-β percepatan rata-rata berorde 2 terhadap Δt, sedangkan elemen balok Hermite kubik berorde 4 terhadap ukuran elemen untuk frekuensi. Garis putus-putus adalah kemiringan teori.
 		</p>
@@ -110,7 +111,7 @@
 			{/each}
 		</div>
 		<p class="mt-3 max-w-3xl text-sm text-redup">
-			Catatan L2: orde dihitung pada rentang asimtotik (N = 8, 16, 32). Jaring N = 2 dan 4 terlalu kasar dibanding panjang gelombang mode sehingga belum mengikuti garis orde 4, tetapi tetap ditampilkan apa adanya.
+			<Info size={16} class="mt-0.5 inline shrink-0" /> Catatan L2: orde dihitung pada rentang asimtotik (N = 8, 16, 32). Jaring N = 2 dan 4 terlalu kasar dibanding panjang gelombang mode sehingga belum mengikuti garis orde 4, tetapi tetap ditampilkan apa adanya.
 		</p>
 	{/if}
 </div>

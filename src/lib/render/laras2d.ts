@@ -85,6 +85,27 @@ export function createLaras2d(canvas: HTMLCanvasElement): Renderer<LarasView> {
 			c.fillText(`simpul ${xi.toFixed(3).replace('.', ',')} L`, px, py + 8);
 		}
 
+		// bayangan tabuh di posisi kursor
+		if (v.hover != null) {
+			const [hx, hy] = P(X(v.hover), v.b / 2, zAt(v.hover));
+			c.globalAlpha = 0.35;
+			c.fillStyle = '#C8B48A';
+			c.strokeStyle = '#6E4424';
+			c.lineWidth = 1;
+			c.beginPath();
+			c.arc(hx, hy - 0.022 * s, 0.011 * s, 0, 7);
+			c.fill();
+			c.stroke();
+			c.globalAlpha = 1;
+			c.strokeStyle = 'rgba(110,68,36,0.6)';
+			c.setLineDash([2, 3]);
+			c.beginPath();
+			c.moveTo(hx, hy - 0.011 * s);
+			c.lineTo(hx, hy);
+			c.stroke();
+			c.setLineDash([]);
+		}
+
 		// penanda posisi pukul dan tabuh
 		const [tx, ty] = P(X(v.xs), v.b / 2, zAt(v.xs));
 		c.strokeStyle = 'rgba(30,27,22,0.55)';
@@ -117,6 +138,7 @@ export function createLaras2d(canvas: HTMLCanvasElement): Renderer<LarasView> {
 
 	/** Klik dianggap mengenai permukaan atas bilah di tengah lebarnya */
 	function pick(clientX: number, clientY: number): number | null {
+		// klik dan hover memakai area yang sama
 		const r = canvas.getBoundingClientRect();
 		const { s, cx, base, L, b, h } = geo;
 		const sx = clientX - r.left;

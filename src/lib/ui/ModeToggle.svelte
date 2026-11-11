@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Layers, Box } from '@lucide/svelte';
 	import { ENABLE_3D } from '#lib/config';
 	let { mode = $bindable() }: { mode: '2d' | '3d' } = $props();
 
@@ -18,7 +19,7 @@
 
 {#if ENABLE_3D}
 	<div class="inline-flex gap-1" role="group" aria-label="Mode tampilan">
-		<button class="tombol !py-1" aria-pressed={mode === '2d'} onclick={() => pilih('2d')}>2.5D</button>
-		<button class="tombol !py-1" aria-pressed={mode === '3d'} onclick={() => pilih('3d')}>3D</button>
+		<button class="tombol !py-1" aria-pressed={mode === '2d'} onclick={() => pilih('2d')} title="Tampilan 2.5D (ringan)"><Layers size={15} />2.5D</button>
+		<button class="tombol !py-1" aria-pressed={mode === '3d'} onclick={() => pilih('3d')} title="Tampilan 3D (seret untuk memutar)"><Box size={15} />3D</button>
 	</div>
 {/if}

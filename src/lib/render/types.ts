@@ -2,7 +2,7 @@
 export interface Renderer<S> {
 	draw(state: S): void;
 	/** Laras: posisi pukul ξ dari koordinat klik (clientX, clientY), null kalau di luar bilah */
-	pick?(clientX: number, clientY: number): number | null;
+	pick?(clientX: number, clientY: number, klik?: boolean): number | null;
 	dispose(): void;
 }
 
@@ -26,6 +26,7 @@ export interface LarasView {
 	simpul: number[]; // titik simpul mode 1 (ξ)
 	xs: number; // posisi pukul saat ini (ξ)
 	umur: number; // detik sejak pukulan terakhir (Infinity kalau belum pernah)
+	hover?: number | null; // posisi kursor di atas bilah (ξ), untuk penanda bayangan
 	warna: [string, string, string];
 }
 

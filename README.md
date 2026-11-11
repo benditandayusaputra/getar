@@ -33,6 +33,7 @@
 | typescript | 6.0.3 | Bahasa |
 | tailwindcss, @tailwindcss/vite | 4.3.5 | Gaya tampilan |
 | three | 0.187.0 | Tampilan 3D |
+| @lucide/svelte | 1.72.0 | Ikon antarmuka |
 | @fontsource-variable/plus-jakarta-sans, @fontsource/jetbrains-mono | 5.3.0 | Huruf (dibundel, jalan tanpa internet) |
 | vitest | 5.1.0 | Uji unit |
 | tsx | 4.23.15 | Menjalankan skrip verifikasi |
@@ -125,9 +126,9 @@ Buka `http://localhost:5173`.
 ### Cara memakai
 
 1. Di halaman utama, pilih **Laras** atau **Ayun**.
-2. Atur parameter dengan slider (bisa juga dengan tombol panah keyboard). Gunakan tombol **2.5D / 3D** di kanan atas untuk mengganti tampilan. Di mode 3D, seret untuk memutar kamera.
-3. **Laras**: klik bilah untuk memukul (nyalakan suara perangkat). Posisi klik menentukan mode mana yang berbunyi. Pilih "Setel Laras" untuk mini-game.
-4. **Ayun**: pilih jenis gerakan tanah. Tekan "Samakan dengan f₁" untuk melihat resonansi, lalu pasang TMD. Pilih "Selamatkan Gedung" untuk mini-game.
+2. Atur parameter dengan slider (bisa juga dengan tombol panah keyboard). Arahkan kursor ke grafik untuk membaca nilainya, klik untuk menguncinya. Gunakan tombol **2.5D / 3D** di kanan atas untuk mengganti tampilan. Di mode 3D, seret untuk memutar kamera.
+3. **Laras**: klik bilah untuk memukul (nyalakan suara perangkat). Posisi klik menentukan mode mana yang berbunyi. Klik grafik bentuk mode untuk memukul di titik itu, atau klik puncak spektrum untuk mendengar satu mode saja. Pilih "Setel Laras" untuk mini-game.
+4. **Ayun**: pilih jenis gerakan tanah. Tekan "Samakan dengan f₁" atau klik kurva respons frekuensi untuk melihat resonansi, lalu pasang TMD. Di mini-game, klik batang lantai untuk memasang bracing. Pilih "Selamatkan Gedung" untuk mini-game.
 5. Buka **Verifikasi** untuk melihat perbandingan hasil simulasi dengan solusi analitik dan mengunduhnya sebagai CSV.
 
 Disarankan memakai Google Chrome, Microsoft Edge, atau Firefox versi terbaru.

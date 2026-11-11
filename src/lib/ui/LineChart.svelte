@@ -17,6 +17,7 @@
 
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { MousePointerClick, Pin } from '@lucide/svelte';
 
 	let {
 		judul,
@@ -31,7 +32,9 @@
 		logY = false,
 		simetris = false,
 		tick = 0,
-		tinggi = 190
+		tinggi = 190,
+		onpick,
+		petunjuk
 	}: {
 		judul: string;
 		seri: Seri[];
@@ -46,15 +49,34 @@
 		simetris?: boolean;
 		tick?: number;
 		tinggi?: number;
+		/** kalau diisi, klik pada grafik memanggil fungsi ini dengan nilai x (bukan mengunci tooltip) */
+		onpick?: (x: number) => void;
+		petunjuk?: string;
 	} = $props();
 
 	let canvas: HTMLCanvasElement;
+	// posisi kursor dalam piksel CSS kanvas; null = tidak ada
+	let hoverPx = $state<number | null>(null);
+	let kunci = $state(false);
+	let tip = $state.raw<{ left: number; kiri: boolean; x: string; items: { nama: string; nilai: string; warna: string }[] } | null>(null);
+	let peta: { L: number; R: number; w: number; inv: (px: number) => number } | null = null;
+
 	const SUP = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 	const pangkat = (k: number) => '10' + (k < 0 ? '⁻' : '') + String(Math.abs(k)).replace(/\d/g, (d) => SUP[+d]);
 	const angka = (v: number) => {
 		const a = Math.abs(v);
 		if (a !== 0 && (a < 1e-3 || a >= 1e5)) return v.toExponential(0).replace('e', 'e');
 		return String(+v.toPrecision(3)).replace('.', ',');
+	};
+	/** angka untuk tooltip: 4 angka penting, notasi ilmiah kalau sangat kecil atau besar */
+	const nilai = (v: number) => {
+		const a = Math.abs(v);
+		if (!Number.isFinite(v)) return '...';
+		if (a !== 0 && (a < 1e-3 || a >= 1e5)) {
+			const [m, p] = v.toExponential(2).split('e');
+			return `${m.replace('.', ',')} × ${pangkat(+p)}`;
+		}
+		return String(+v.toPrecision(4)).replace('.', ',');
 	};
 
 	function ticks(a: number, b: number, n: number): number[] {
@@ -124,6 +146,11 @@
 		const ty = (v: number) => (logY ? Math.log10(Math.max(v, 1e-300)) : v);
 		const X = (v: number) => L + ((tx(v) - tx(x0)) / (tx(x1) - tx(x0))) * (w - L - R);
 		const Y = (v: number) => h - B - ((ty(v) - ty(y0)) / (ty(y1) - ty(y0))) * (h - T - B);
+		const invX = (px: number) => {
+			const u = tx(x0) + ((px - L) / (w - L - R)) * (tx(x1) - tx(x0));
+			return logX ? 10 ** u : u;
+		};
+		peta = { L, R, w, inv: invX };
 
 		c.font = '11px "JetBrains Mono", monospace';
 		c.lineWidth = 1;
@@ -225,6 +252,43 @@
 					c.fill();
 				}
 		}
+		c.setLineDash([]);
+
+		// garis bidik dan titik terdekat tiap seri
+		const px = hoverPx;
+		if (px !== null && px >= L && px <= w - R) {
+			const xd = invX(px);
+			c.strokeStyle = 'rgba(30,27,22,0.45)';
+			c.lineWidth = 1;
+			c.beginPath();
+			c.moveTo(px, T);
+			c.lineTo(px, h - B);
+			c.stroke();
+			const items: { nama: string; nilai: string; warna: string }[] = [];
+			let xTerdekat = xd;
+			seri.forEach((s, si) => {
+				let best = -1;
+				let d = Infinity;
+				for (let i = 0; i < s.x.length; i++) {
+					const di = Math.abs(tx(s.x[i]) - tx(xd));
+					if (di < d && !(logY && s.y[i] <= 0)) {
+						d = di;
+						best = i;
+					}
+				}
+				if (best < 0) return;
+				if (si === 0) xTerdekat = s.x[best];
+				c.fillStyle = '#fff';
+				c.strokeStyle = s.warna;
+				c.lineWidth = 2;
+				c.beginPath();
+				c.arc(X(s.x[best]), Y(s.y[best]), 4, 0, 7);
+				c.fill();
+				c.stroke();
+				items.push({ nama: s.nama ?? yLabel ?? 'nilai', nilai: nilai(s.y[best]), warna: s.warna });
+			});
+			tip = { left: px, kiri: px > w / 2, x: `${xLabel || 'x'} = ${nilai(onpick ? xd : xTerdekat)}`, items };
+		} else tip = null;
 		c.restore();
 
 		// legenda
@@ -243,7 +307,7 @@
 	}
 
 	$effect(() => {
-		void [tick, seri, hGaris, vGaris, xRange, yRange, logX, logY];
+		void [tick, seri, hGaris, vGaris, xRange, yRange, logX, logY, hoverPx];
 		draw();
 	});
 	onMount(() => {
@@ -252,9 +316,74 @@
 		document.fonts?.ready.then(draw);
 		return () => ro.disconnect();
 	});
+
+	const posisi = (e: PointerEvent) => e.clientX - canvas.getBoundingClientRect().left;
+	function gerak(e: PointerEvent) {
+		if (!kunci) hoverPx = posisi(e);
+	}
+	function klik(e: MouseEvent) {
+		const px = e.clientX - canvas.getBoundingClientRect().left;
+		if (onpick && peta) {
+			if (px >= peta.L && px <= peta.w - peta.R) onpick(peta.inv(px));
+			return;
+		}
+		kunci = !kunci;
+		hoverPx = px;
+	}
+	function tombol(e: KeyboardEvent) {
+		if (!peta) return;
+		const langkah = (peta.w - peta.L - peta.R) / 50;
+		const kini = hoverPx ?? (peta.L + peta.w - peta.R) / 2;
+		if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+			e.preventDefault();
+			hoverPx = Math.min(peta.w - peta.R, Math.max(peta.L, kini + (e.key === 'ArrowLeft' ? -langkah : langkah)));
+		} else if ((e.key === 'Enter' || e.key === ' ') && onpick && hoverPx !== null) {
+			e.preventDefault();
+			onpick(peta.inv(hoverPx));
+		} else if (e.key === 'Escape') {
+			hoverPx = null;
+			kunci = false;
+		}
+	}
 </script>
 
-<figure class="kartu !p-3">
+<figure class="kartu kartu-hidup !p-3">
 	<figcaption class="label-kecil mb-1">{judul}</figcaption>
-	<canvas bind:this={canvas} class="block w-full" style:height="{tinggi}px" aria-label={judul}></canvas>
+	<div class="relative">
+		<canvas
+			bind:this={canvas}
+			class="block w-full touch-pan-y"
+			class:cursor-crosshair={!onpick}
+			class:cursor-pointer={!!onpick}
+			style:height="{tinggi}px"
+			tabindex="0"
+			aria-label="{judul}. Gunakan panah kiri dan kanan untuk membaca nilai{onpick ? ', Enter untuk memilih' : ''}."
+			onpointermove={gerak}
+			onpointerdown={gerak}
+			onpointerleave={() => !kunci && (hoverPx = null)}
+			onblur={() => !kunci && (hoverPx = null)}
+			onclick={klik}
+			onkeydown={tombol}
+		></canvas>
+		{#if tip && tip.items.length}
+			<div
+				class="pointer-events-none absolute top-1 z-10 min-w-32 rounded-lg border border-garis bg-kartu/95 px-2 py-1.5 text-[0.7rem] shadow-lg backdrop-blur"
+				style:left="{tip.left}px"
+				style:transform="translateX({tip.kiri ? 'calc(-100% - 10px)' : '10px'})"
+				aria-live="polite"
+			>
+				<div class="mb-0.5 font-mono font-semibold">{tip.x}</div>
+				{#each tip.items as it, i (i)}
+					<div class="flex items-center gap-1.5 whitespace-nowrap">
+						<i class="inline-block h-2 w-2 shrink-0 rounded-full" style:background={it.warna}></i>
+						<span class="text-redup">{it.nama}</span>
+						<span class="ml-auto pl-2 font-mono font-semibold">{it.nilai}</span>
+					</div>
+				{/each}
+			</div>
+		{/if}
+	</div>
+	<p class="mt-1 flex items-center gap-1 text-[0.65rem] text-redup" aria-hidden="true">
+		{#if kunci}<Pin size={11} />terkunci, klik lagi untuk melepas{:else}<MousePointerClick size={11} />{petunjuk ?? 'arahkan atau klik untuk membaca nilai'}{/if}
+	</p>
 </figure>

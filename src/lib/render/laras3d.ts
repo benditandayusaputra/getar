@@ -86,8 +86,8 @@ export function createLaras3d(canvas: HTMLCanvasElement): Renderer<LarasView> {
 	canvas.addEventListener('pointerdown', onDown);
 	const ray = new THREE.Raycaster();
 
-	function pick(clientX: number, clientY: number): number | null {
-		if (Math.hypot(clientX - turun.x, clientY - turun.y) > 5) return null;
+	function pick(clientX: number, clientY: number, klik = true): number | null {
+		if (klik && Math.hypot(clientX - turun.x, clientY - turun.y) > 5) return null;
 		const r = canvas.getBoundingClientRect();
 		ray.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, -((clientY - r.top) / r.height) * 2 + 1), camera);
 		const kena = ray.intersectObject(bilah)[0];

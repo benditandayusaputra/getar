@@ -7,13 +7,14 @@
 	import { page } from '$app/state';
 	import { resolve } from '$app/paths';
 	import { TIM } from '#lib/config';
+	import { Music, Building2, ShieldCheck, Atom } from '@lucide/svelte';
 	import type { LayoutProps } from './$types';
 
 	let { children }: LayoutProps = $props();
 	const nav = [
-		{ href: '/laras', nama: 'Laras' },
-		{ href: '/ayun', nama: 'Ayun' },
-		{ href: '/verifikasi', nama: 'Verifikasi' }
+		{ href: '/laras', nama: 'Laras', ikon: Music, warna: '#8A5F1A' },
+		{ href: '/ayun', nama: 'Ayun', ikon: Building2, warna: '#2F5D7C' },
+		{ href: '/verifikasi', nama: 'Verifikasi', ikon: ShieldCheck, warna: '#1E1B16' }
 	] as const;
 </script>
 
@@ -30,13 +31,14 @@
 			</a>
 			<ul class="flex gap-1 text-sm font-semibold">
 				{#each nav as n (n.href)}
+					{@const aktif = page.url.pathname.startsWith(n.href)}
 					<li>
 						<a
 							href={resolve(n.href)}
-							class="rounded-lg px-3 py-1.5 hover:bg-garis/60"
-							class:bg-tinta={page.url.pathname.startsWith(n.href)}
-							class:text-white={page.url.pathname.startsWith(n.href)}
-							aria-current={page.url.pathname.startsWith(n.href) ? 'page' : undefined}>{n.nama}</a>
+							class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 transition-colors hover:bg-garis/60 sm:px-3"
+							style:background={aktif ? n.warna : undefined}
+							style:color={aktif ? '#fff' : undefined}
+							aria-current={aktif ? 'page' : undefined}><n.ikon size={16} /><span class="sr-only sm:not-sr-only">{n.nama}</span></a>
 					</li>
 				{/each}
 			</ul>
@@ -45,10 +47,10 @@
 
 	<main class="flex-1">{@render children()}</main>
 
-	<footer class="mt-10 border-t border-garis">
+	<footer class="mt-10 border-t border-garis bg-kertas/80">
 		<div class="gelombang"></div>
 		<div class="mx-auto max-w-7xl px-4 py-6 text-sm text-redup">
-			<p><strong class="text-tinta">Getar</strong>{TIM.nama ? `, karya ${TIM.nama}` : ''}, {TIM.kampus}.{TIM.dosen ? ` Dosen pembimbing: ${TIM.dosen}.` : ''}</p>
+			<p><Atom size={15} class="mr-1 inline -translate-y-px text-perunggu" /><strong class="text-tinta">Getar</strong>{TIM.nama ? `, karya ${TIM.nama}` : ''}, {TIM.kampus}.{TIM.dosen ? ` Dosen pembimbing: ${TIM.dosen}.` : ''}</p>
 			<p>{TIM.lomba}.</p>
 		</div>
 	</footer>
