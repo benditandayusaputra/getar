@@ -2,8 +2,8 @@
 export const ENABLE_3D = true;
 
 export const TIM = {
-	nama: '', // ISI sebelum submit: nama tim
+	nama: "", // diisi oleh 05_Submit/siapkan_submit.py
 	kampus: 'Universitas Bina Nusantara',
-	dosen: '', // ISI sebelum submit: nama dosen pembimbing
+	dosen: "", // diisi oleh 05_Submit/siapkan_submit.py
 	lomba: 'The Digital Physics Hackathon 2026, Departemen Fisika Universitas Negeri Malang'
 };

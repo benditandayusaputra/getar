@@ -8,7 +8,8 @@
 | Judul Karya | Getar: Simulasi Interaktif Getaran dan Resonansi, dari Bilah Gamelan hingga Gedung Tahan Gempa |
 | Kategori | 3. Desain dan Simulasi Fisika (SIM), The Digital Physics Hackathon 2026 |
 | Perguruan Tinggi | Universitas Bina Nusantara |
-| Demo daring | [ISI: URL Vercel] |
+| Demo daring | https://getar-theta.vercel.app |
+| Anggota | Bendi Tandayu Saputra (ketua) |
 | Video demo | [ISI: link YouTube atau Google Drive] |
 
 ---
@@ -88,7 +89,7 @@ getar/
 
 ### Cara tercepat (tanpa instalasi)
 
-Buka demo daring: [ISI: URL Vercel]
+Buka demo daring: https://getar-theta.vercel.app
 
 ### Menjalankan hasil build yang sudah disertakan
 
