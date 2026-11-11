@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| Nama Tim | [ISI: Nama Tim] |
+| Nama Tim | Getar Getir |
 | Judul Karya | Getar: Simulasi Interaktif Getaran dan Resonansi, dari Bilah Gamelan hingga Gedung Tahan Gempa |
 | Kategori | 3. Desain dan Simulasi Fisika (SIM), The Digital Physics Hackathon 2026 |
 | Perguruan Tinggi | Universitas Bina Nusantara |
@@ -19,7 +19,7 @@
 | | |
 |---|---|
 | Judul Program | Getar |
-| Nama File ZIP | `SIM_[ISI: NamaTim]_BINUS_KodeSumber.zip` |
+| Nama File ZIP | `SIM_GetarGetir_BINUS_KodeSumber.zip` |
 | Bahasa Pemrograman / Platform / Framework | TypeScript; aplikasi web (browser); SvelteKit 3 + Svelte 5 |
 | Jenis Karya | Simulasi interaktif dan mini-game edukasi (dua modul: Laras dan Ayun) dengan model komputasi elemen hingga dan integrasi waktu Newmark-β |
 

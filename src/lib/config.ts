@@ -2,7 +2,7 @@
 export const ENABLE_3D = true;
 
 export const TIM = {
-	nama: "", // diisi oleh 05_Submit/siapkan_submit.py
+	nama: "Getar Getir", // diisi oleh 05_Submit/siapkan_submit.py
 	kampus: 'Universitas Bina Nusantara',
 	dosen: "", // diisi oleh 05_Submit/siapkan_submit.py
 	lomba: 'The Digital Physics Hackathon 2026, Departemen Fisika Universitas Negeri Malang'
