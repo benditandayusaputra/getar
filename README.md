@@ -63,8 +63,8 @@ getar/
 │   │   │   ├── damping.ts     Redaman Rayleigh
 │   │   │   └── signal.ts      FFT, frekuensi puncak, periode dari zero-crossing
 │   │   ├── models/
-│   │   │   ├── ayun/      building (K, M, C, respons frekuensi), groundMotion, tmd, drift, sim (loop simulasi), game (mini-game)
-│   │   │   └── laras/     beamFem, beamAnalytic, materials, synth (sintesis bunyi), tuning (laras slendro)
+│   │   │   ├── ayun/      building (K, M, C), groundMotion, tmd, drift, sim, game
+│   │   │   └── laras/     beamFem, beamAnalytic, materials, synth (bunyi), tuning
 │   │   ├── render/        Tampilan 2.5D (Canvas 2D) dan 3D (Three.js) untuk tiap modul
 │   │   ├── audio/         Pemutar bunyi (Web Audio API)
 │   │   ├── verify/        Kasus uji verifikasi (dipakai halaman /verifikasi dan skrip)
