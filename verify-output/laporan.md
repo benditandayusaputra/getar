@@ -1,0 +1,108 @@
+# Angka untuk laporan teknis
+
+Kunci = nomor urut placeholder [ISI] pada templat laporan (lihat 03_Laporan/isi_laporan.py).
+
+| No. | Nilai |
+|---|---|
+| 3 | 0,0062 |
+| 4 | 6,6 × 10⁻¹⁴ |
+| 5 | 0,0149 |
+| 7 | 0,99503 s |
+| 8 | 0,0329 |
+| 9 | 0,20769 |
+| 10 | 0,1046 |
+| 11 | 2,0259 Hz |
+| 12 | 6,6 × 10⁻¹⁴ |
+| 13 | 5,9135 Hz |
+| 14 | 3,0 × 10⁻¹⁴ |
+| 15 | 9,3221 Hz |
+| 16 | 1,9 × 10⁻¹⁴ |
+| 17 | 11,9755 Hz |
+| 18 | 4,4 × 10⁻¹⁴ |
+| 19 | 13,6586 Hz |
+| 20 | 2,6 × 10⁻¹⁴ |
+| 21 | T = 0,49428 s (+0,1349%) |
+| 22 | 0,1349 |
+| 23 | 1,3304 |
+| 24 | 2,1 × 10⁻⁴ |
+| 25 | 4,7569 |
+| 26 | 0,0072 |
+| 27 | 9,9999 |
+| 28 | 0,0013 |
+| 29 | 4,2176 |
+| 30 | 0,0149 |
+| 31 | 0,3325 |
+| 32 | 0,0142 |
+| 33 | 4,9 × 10⁻¹³ |
+| 34 | 4,9 × 10⁻¹¹ |
+| 35 | 0,9755 |
+| 36 | 0,0023 |
+| 37 | 6,0692 |
+| 38 | 0,9817 |
+| 39 | 6,18 |
+| 40 | 1,988 |
+| 41 | 0,2455 |
+| 42 | 4,00 |
+| 43 | 2,000 |
+| 44 | 0,0614 |
+| 45 | 4,00 |
+| 46 | 2,000 |
+| 47 | 0,0025 |
+| 48 | 25,00 |
+| 49 | 2,000 |
+| 50 | 557,60 Hz |
+| 51 | 2,2 × 10⁻⁴ |
+| 52 | 1537,06 Hz |
+| 53 | 0,0016 |
+| 54 | 3013,39 Hz |
+| 55 | 0,0062 |
+| 56 | 2,7566 |
+| 57 | 0,0014 |
+| 58 | 5,4042 |
+| 59 | 0,0060 |
+| 60 | 0,25000 |
+| 61 | 3,1 × 10⁻¹⁰ |
+| 62 | 2,00000 |
+| 63 | 3,1 × 10⁻¹⁰ |
+| 64 | 1,00000 |
+| 65 | 3,1 × 10⁻¹⁰ |
+| 66 | 0,2242 dan 0,7758 |
+| 67 | 3,9 × 10⁻⁷ |
+| 68 | 557,60 Hz |
+| 69 | 3,9 × 10⁻⁴ |
+| 70 | 558,84 |
+| 71 | 0,2233 |
+| 72 | 4373,38 |
+| 73 | 45,1406 |
+| 74 | 558,20 |
+| 75 | 0,1087 |
+| 76 | 3037,05 |
+| 77 | 0,7915 |
+| 78 | 557,64 |
+| 79 | 0,0081 |
+| 80 | 3019,56 |
+| 81 | 0,2111 |
+| 82 | 557,60 |
+| 83 | 5,2 × 10⁻⁴ |
+| 84 | 3013,65 |
+| 85 | 0,0149 |
+| 86 | 557,60 |
+| 87 | 3,3 × 10⁻⁵ |
+| 88 | 3013,23 |
+| 89 | 9,6 × 10⁻⁴ |
+| 94 | 6,6 × 10⁻¹⁴ |
+| 95 | 0,25 |
+| 96 | 2,00 |
+| 97 | +0,135 |
+| 98 | 557,60 |
+| 99 | 2,2 × 10⁻⁴ |
+| 100 | 3,97 untuk f₁ dan 3,89 untuk f₃ (pada rentang N = 8 sampai 32) |
+| 101 | 0,01 |
+| 102 | 0,0261 |
+| 103 | 0,1137 |
+| 104 | 59,6 |
+| 105 | 0,2242 L dan 0,7758 L |
+| 106 | Empat hal perlu dicatat. Pertama, pada uji konvergensi elemen hingga (L2), jaring N = 2 dan N = 4 belum mengikuti garis orde empat: galat f₃ pada N = 2 mencapai 45,1% karena dua elemen tidak cukup untuk mewakili bentuk mode ketiga. Orde konvergensi karena itu dihitung pada rentang asimtotik N = 8 sampai 32, sedangkan seluruh titik tetap ditampilkan pada tabel dan Gambar 2. Kedua, galat riwayat waktu Newmark (A1) didominasi galat fase akibat pemanjangan periode, bukan galat amplitudo, sehingga galat tumbuh bersama lama simulasi. Dengan Δt = 0,002 s yang dipakai aplikasi, pemanjangan periode mode pertama gedung default hanya 0,0054%. Ketiga, rasio penyetelan optimum TMD hasil sapuan numerik (A7) berimpit dengan rumus Warburton dan berbeda 0,50% dari rumus Den Hartog. Perbedaan ini wajar karena rumus Den Hartog diturunkan untuk gaya harmonik pada massa utama, sedangkan gempa bekerja sebagai percepatan tanah. Keempat, resolusi FFT pada uji L6 adalah 0,34 Hz per bin; interpolasi parabola di sekitar puncak menurunkan galat frekuensi menjadi 3,9 × 10⁻⁴%. Di luar verifikasi numerik, hasil tetap dibatasi oleh asumsi model: gedung linear elastis tanpa kerusakan, bilah seragam tanpa cekungan penyetel, redaman modal bilah yang sama untuk semua mode, dan laras slendro yang diidealkan berjarak sama. |
+| 107 | 0,01 |
+
+Simpangan atap maksimum gedung default (sinus 0,15 g, 30 s): 0,0261 m pada 1,5 Hz; 0,1137 m pada f₁ = 2,0259 Hz; 0,0459 m pada f₁ dengan TMD μ = 2% (Warburton).
